@@ -1,3 +1,7 @@
 .app-skeleton{
   height: 100%;
 }
+
+.app-skeleton .app-sider{
+  padding-top: 64px;
+}
