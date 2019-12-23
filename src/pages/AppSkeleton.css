@@ -1,7 +1,27 @@
-.app-skeleton{
+/* .app-skeleton{
   height: 100%;
-}
+} */
 
 .app-skeleton .app-sider{
+  height: 100vh;
   padding-top: 64px;
+}
+
+.app-skeleton .skeleton-content{
+  width: 100%;
+  height: 100vh;
+  overflow: auto;
+}
+
+.app-skeleton .header-container{
+  background: #fff;
+  padding: 0;
+}
+
+.app-skeleton .app-container{
+  min-height: 100vh;
+}
+
+.app-skeleton .router-container{
+  padding: 24px 16px;
 }

@@ -3,33 +3,38 @@
  * @Author: liujia
  * @Date: 2019-12-17 19:36:47
  * @Last Modified by: liujia
- * @Last Modified time: 2019-12-18 20:25:46
+ * @Last Modified time: 2019-12-23 20:01:22
  * @description: 主页
  */
 import React from 'react'
-import { Table, Divider } from 'antd';
+import { Table, Divider, Button, Select, Input } from 'antd';
+import { getPasswordList } from '../api/home'
+import './Home.css'
+
+const { Option } = Select
+const { Search } = Input
 
 const columns = [
   {
     title: '类别',
-    dataIndex: 'name',
-    key: 'name',
-    render: text => <a>{text}</a>,
+    dataIndex: 'type',
+    key: 'type',
+    // render: text => <a>{text}</a>,
   },
   {
     title: '描述',
-    dataIndex: 'age',
-    key: 'age',
+    dataIndex: 'description',
+    key: 'description',
   },
   {
     title: '登陆项',
-    dataIndex: 'address',
-    key: 'address',
+    dataIndex: 'loginName',
+    key: 'loginName',
   },
   {
     title: '用户名',
-    key: 'tags',
-    dataIndex: 'tags'
+    key: 'username',
+    dataIndex: 'username'
   },
   {
     title: '备注',
@@ -38,8 +43,8 @@ const columns = [
   },
   {
     title: '最后更新',
-    key: 'lastUpdate',
-    dataIndex: 'lastUpdate'
+    key: 'lastModified',
+    dataIndex: 'lastModified'
   },
   {
     title: '复制密码',
@@ -54,36 +59,71 @@ const columns = [
   },
 ];
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  }
-];
-
 class Home extends React.Component {
 
+  state = {
+    passwordList: [],
+    searchOptions: {
+      type: 'type',
+      value: ''
+    }
+  }
+
+  componentDidMount () {
+    this.getListData()
+  }
+
+  getListData = async () => {
+    const res = await getPasswordList(this.state.searchOptions)
+    const data = res.data.data || []
+    this.setState({
+      passwordList: data
+    })
+  }
+
+  searchChange = (e) => {
+    const value = e.target.value
+    this.setState({
+      searchOptions: Object.assign({}, this.state.searchOptions, {
+        value: value
+      })
+    })
+  }
+
+  searchTypeChange = (value) => {
+    this.setState({
+      searchOptions: Object.assign({}, this.state.searchOptions, {
+        type: value
+      })
+    })
+  }
+
   render () {
+    const { passwordList, searchOptions } = this.state
     return (
-      <div>
-        <Table columns={columns} dataSource={data} />
+      <div className="home">
+        <div className="operate">
+          <Button type="primary">添加</Button>
+          {/* onChange={handleChange} */}
+          <Search
+            onChange={this.searchChange}
+            onSearch={this.getListData}
+            className="input-item"
+            value={searchOptions.value}
+            enterButton={true}
+            placeholder="请输入搜索内容" />
+          <Select
+            onChange={this.searchTypeChange}
+            className="select-item"
+            defaultValue={searchOptions.type}>
+            <Option value="type">类别</Option>
+            <Option value="description">描述</Option>
+            <Option value="loginName">登陆项</Option>
+            <Option value="username">用户名</Option>
+            <Option value="remark">备注</Option>
+          </Select>
+        </div>
+        <Table rowKey="recordId" columns={columns} pagination={false} dataSource={passwordList} />
       </div>
     )
   }

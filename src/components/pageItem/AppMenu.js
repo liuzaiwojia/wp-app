@@ -2,13 +2,14 @@
  * @Author: liujia
  * @Date: 2019-12-17 19:36:47
  * @Last Modified by: liujia
- * @Last Modified time: 2019-12-18 20:00:10
+ * @Last Modified time: 2019-12-23 20:17:46
  * @description: 菜单
  */
 import React from 'react'
 /* , Button */
-import { Menu, Icon } from 'antd';
+import { Menu, Icon, Layout } from 'antd';
 
+const { Sider } = Layout;
 /* const { SubMenu } = Menu; */
 
 class AppMenu extends React.Component {
@@ -52,10 +53,11 @@ class AppMenu extends React.Component {
 
   render () {
     return (
-      <div style={{ width: '100%', height: '100%' }}>
+      <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.toggleCollapsed}>
         {/* <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16 }}>
           <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
         </Button> */}
+        <div style={{width: '100%', height: 60}}></div>
         <Menu
           defaultSelectedKeys={['1']}
           defaultOpenKeys={['sub1']}
@@ -115,7 +117,7 @@ class AppMenu extends React.Component {
             </SubMenu>
           </SubMenu> */}
         </Menu>
-      </div>
+      </Sider>
     )
   }
 }

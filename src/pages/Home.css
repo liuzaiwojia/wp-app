@@ -1,0 +1,15 @@
+.home .operate{
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.home .operate .select-item{
+  float: right;
+  margin-right: 16px;
+  width: 120px;
+}
+
+.home .operate .input-item{
+  float: right;
+  width: 240px;
+}
