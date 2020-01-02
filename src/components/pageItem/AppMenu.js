@@ -2,7 +2,7 @@
  * @Author: liujia
  * @Date: 2019-12-17 19:36:47
  * @Last Modified by: liujia
- * @Last Modified time: 2019-12-23 20:17:46
+ * @Last Modified time: 2020-01-02 20:22:03
  * @description: 菜单
  */
 import React from 'react'
@@ -63,7 +63,6 @@ class AppMenu extends React.Component {
           defaultOpenKeys={['sub1']}
           mode="inline"
           theme="dark"
-          inlineCollapsed={this.state.collapsed}
           onClick={this.menuClick}
         >
           {this.state.menuData.map(item => {

@@ -3,61 +3,17 @@
  * @Author: liujia
  * @Date: 2019-12-17 19:36:47
  * @Last Modified by: liujia
- * @Last Modified time: 2019-12-23 20:01:22
+ * @Last Modified time: 2020-01-02 20:15:25
  * @description: 主页
  */
 import React from 'react'
 import { Table, Divider, Button, Select, Input } from 'antd';
-import { getPasswordList } from '../api/home'
+import { getPasswordList } from '../api/home';
+import PasswordEdit from '../components/home/PasswordEdit';
 import './Home.css'
 
 const { Option } = Select
 const { Search } = Input
-
-const columns = [
-  {
-    title: '类别',
-    dataIndex: 'type',
-    key: 'type',
-    // render: text => <a>{text}</a>,
-  },
-  {
-    title: '描述',
-    dataIndex: 'description',
-    key: 'description',
-  },
-  {
-    title: '登陆项',
-    dataIndex: 'loginName',
-    key: 'loginName',
-  },
-  {
-    title: '用户名',
-    key: 'username',
-    dataIndex: 'username'
-  },
-  {
-    title: '备注',
-    key: 'remark',
-    dataIndex: 'remark'
-  },
-  {
-    title: '最后更新',
-    key: 'lastModified',
-    dataIndex: 'lastModified'
-  },
-  {
-    title: '复制密码',
-    key: 'action',
-    render: (text, record) => (
-      <span>
-        <a>Invite {record.name}</a>
-        <Divider type="vertical" />
-        <a>Delete</a>
-      </span>
-    ),
-  },
-];
 
 class Home extends React.Component {
 
@@ -66,13 +22,66 @@ class Home extends React.Component {
     searchOptions: {
       type: 'type',
       value: ''
-    }
+    },
+    modalVisible: false,
+    modalId: null
   }
+
+  columns = [
+    {
+      title: '类别',
+      dataIndex: 'type',
+      key: 'type',
+      // render: text => <a>{text}</a>,
+    },
+    {
+      title: '描述',
+      dataIndex: 'description',
+      key: 'description',
+    },
+    {
+      title: '登陆项',
+      dataIndex: 'loginName',
+      key: 'loginName',
+    },
+    {
+      title: '用户名',
+      key: 'username',
+      dataIndex: 'username'
+    },
+    {
+      title: '备注',
+      key: 'remark',
+      dataIndex: 'remark'
+    },
+    {
+      title: '最后更新',
+      key: 'lastModified',
+      dataIndex: 'lastModified'
+    },
+    {
+      title: '复制密码',
+      key: 'action',
+      width: 90,
+      render: (text, record) => (
+        <span>
+          <a>复制</a>
+          <Divider type="vertical" />
+          <a onClick={() => this.showPasswordEdit(record.recordId)}>编辑 {record.name}</a>
+          <Divider type="vertical" />
+          <a onClick={() => this.handleItemDelete(record.recordId)}>删除</a>
+        </span>
+      ),
+    },
+  ];
 
   componentDidMount () {
     this.getListData()
   }
 
+  /**
+   * @description 获取列表数据
+   */
   getListData = async () => {
     const res = await getPasswordList(this.state.searchOptions)
     const data = res.data.data || []
@@ -81,6 +90,9 @@ class Home extends React.Component {
     })
   }
 
+  /**
+   * @description 搜索内容发生变化
+   */
   searchChange = (e) => {
     const value = e.target.value
     this.setState({
@@ -90,6 +102,9 @@ class Home extends React.Component {
     })
   }
 
+  /**
+   * @description 搜索类型发生变化
+   */
   searchTypeChange = (value) => {
     this.setState({
       searchOptions: Object.assign({}, this.state.searchOptions, {
@@ -98,12 +113,46 @@ class Home extends React.Component {
     })
   }
 
+  /**
+   * @description 显示弹框
+   */
+  showPasswordEdit = (id) => {
+    this.setState({
+      modalVisible: true,
+      modalId: typeof id === 'string' ? id : null
+    })
+  }
+
+  /**
+   * @description 隐藏弹框
+   */
+  hidePasswordEdit = () => {
+    this.setState({
+      modalVisible: false
+    })
+  }
+
+  handleOk = () => {
+    this.getListData()
+    this.hidePasswordEdit()
+  }
+
+  handleItemDelete = (id) => {
+    console.log('delete')
+    this.getListData()
+  }
+
   render () {
-    const { passwordList, searchOptions } = this.state
+    const { passwordList, searchOptions, modalVisible, modalId } = this.state
     return (
       <div className="home">
         <div className="operate">
-          <Button type="primary">添加</Button>
+          <Button onClick={this.showPasswordEdit} type="primary">添加</Button>
+          <PasswordEdit
+            onCancel={this.hidePasswordEdit}
+            onOk={this.handleOk}
+            visible={modalVisible}
+            passwordId={modalId}></PasswordEdit>
           {/* onChange={handleChange} */}
           <Search
             onChange={this.searchChange}
@@ -123,7 +172,7 @@ class Home extends React.Component {
             <Option value="remark">备注</Option>
           </Select>
         </div>
-        <Table rowKey="recordId" columns={columns} pagination={false} dataSource={passwordList} />
+        <Table rowKey="recordId" columns={this.columns} pagination={false} dataSource={passwordList} />
       </div>
     )
   }

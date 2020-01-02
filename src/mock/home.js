@@ -23,3 +23,14 @@ const getPasswordList = () => {
 }
 
 Mock.mock(new RegExp(`${backendHost}/password/list(\\?.*)?`), 'get', wrapData(getPasswordList()))
+
+Mock.mock(new RegExp(`${backendHost}/password(\\?.*)?`), 'get', wrapData({
+  type: /(ssh)|(web)|(ftp)/,
+  description: Random.paragraph(),
+  loginName: Random.domain(),
+  username: Random.string(),
+  remark: Random.paragraph(),
+  lastModified: Random.date(),
+  password: Random.string(),
+  recordId: Random.guid()
+}))
