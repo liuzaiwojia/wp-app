@@ -2,7 +2,7 @@
  * @Author: liujia
  * @Date: 2019-12-25 19:27:43
  * @Last Modified by: liujia
- * @Last Modified time: 2020-01-03 16:34:54
+ * @Last Modified time: 2020-01-03 17:57:33
  * @description: 密码的表单
  */
 import React from 'react';
@@ -79,6 +79,9 @@ class PasswordForm extends React.Component {
         </Form.Item>
         <Form.Item label="备注" hasFeedback>
           {getFieldDecorator('remark')(<Input.TextArea />)}
+        </Form.Item>
+        <Form.Item label="登陆项" hasFeedback>
+          {getFieldDecorator('loginName')(<Input />)}
         </Form.Item>
       </Form>
     )

@@ -2,7 +2,7 @@
  * @Author: liujia
  * @Date: 2019-12-25 17:45:11
  * @Last Modified by: liujia
- * @Last Modified time: 2020-01-03 15:47:30
+ * @Last Modified time: 2020-01-03 17:57:15
  * @description: 编辑或新增密码
  */
 import React from 'react';
@@ -37,13 +37,21 @@ class PasswordEdit extends React.Component {
         })
         this.passwordForm.setFields({
           username: data.username,
-          password: data.password
+          password: data.password,
+          type: data.type,
+          description: data.description,
+          remark: data.remark,
+          loginName: data.loginName
         })
       }
     } else {
       this.passwordForm.setFields({
         username: '',
-        password: ''
+        password: '',
+        type: '',
+        description: '',
+        remark: '',
+        loginName: ''
       })
     }
   }
