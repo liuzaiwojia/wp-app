@@ -3,13 +3,14 @@
  * @Author: liujia
  * @Date: 2019-12-17 19:36:47
  * @Last Modified by: liujia
- * @Last Modified time: 2020-01-02 20:15:25
+ * @Last Modified time: 2020-01-03 17:29:35
  * @description: 主页
  */
 import React from 'react'
-import { Table, Divider, Button, Select, Input } from 'antd';
-import { getPasswordList } from '../api/home';
+import { Table, Divider, Button, Select, Input, Modal } from 'antd';
+import { getPasswordList, deletePassword } from '../api/home';
 import PasswordEdit from '../components/home/PasswordEdit';
+import { copy } from '../common/util.js'
 import './Home.css'
 
 const { Option } = Select
@@ -65,11 +66,11 @@ class Home extends React.Component {
       width: 90,
       render: (text, record) => (
         <span>
-          <a>复制</a>
+          <a onClick={() => this.copyPassword(record.password)}>复制</a>
           <Divider type="vertical" />
           <a onClick={() => this.showPasswordEdit(record.recordId)}>编辑 {record.name}</a>
           <Divider type="vertical" />
-          <a onClick={() => this.handleItemDelete(record.recordId)}>删除</a>
+          <a onClick={() => this.showDeleteConfirm(record.recordId)}>删除</a>
         </span>
       ),
     },
@@ -132,14 +133,47 @@ class Home extends React.Component {
     })
   }
 
+  /**
+   * @description 成功添加或编辑password
+   */
   handleOk = () => {
     this.getListData()
     this.hidePasswordEdit()
   }
 
-  handleItemDelete = (id) => {
-    console.log('delete')
+  /**
+   * @description 删除password
+   */
+  handleItemDelete = async (id) => {
+    await deletePassword(id)
     this.getListData()
+  }
+
+  /**
+   * @description 弹出删除确认框
+   */
+  showDeleteConfirm = (id) => {
+    Modal.confirm({
+      title: '确认',
+      content: '是否确认删除此密码？',
+      okText: '删除',
+      okType: 'danger',
+      cancelText: '取消',
+      autoFocusButton: 'cancel',
+      onOk: () => {
+        return new Promise((resolve, reject) => {
+          this.handleItemDelete(id).then(res => {
+            resolve()
+          }).catch(error => {
+            reject()
+          })
+        })
+      }
+    })
+  }
+
+  copyPassword = (password) => {
+    return copy(password)
   }
 
   render () {

@@ -7,18 +7,21 @@ import {
   Route
 } from "react-router-dom";
 import AppSkeleton from './pages/AppSkeleton'
+import ErrorPage from './pages/ErrorPage'
 
 function App() {
   return (
-    <Router>
-      <Switch>
-        <Route path="/login">
-        </Route>
-        <Route path="/">
-          <AppSkeleton></AppSkeleton>
-        </Route>
-      </Switch>
-    </Router>
+    <ErrorPage>
+      <Router>
+        <Switch>
+          <Route path="/login">
+          </Route>
+          <Route path="/">
+            <AppSkeleton></AppSkeleton>
+          </Route>
+        </Switch>
+      </Router>
+    </ErrorPage>
   );
 }
 
