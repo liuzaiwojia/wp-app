@@ -2,7 +2,7 @@
  * @Author: liujia
  * @Date: 2020-01-03 14:36:29
  * @Last Modified by: liujia
- * @Last Modified time: 2020-01-03 16:28:58
+ * @Last Modified time: 2020-01-06 08:45:41
  * @description: 界面报错情况下的展示页面
  */
 import React from 'react';
